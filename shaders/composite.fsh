@@ -2,6 +2,8 @@
 
 #version 120
 
+#define MODE 1 //[1 2 3]
+
 varying vec2 texcoord;
 
 uniform vec3 sunPosition;
@@ -150,10 +152,20 @@ void main()
 
     vec3 lightmap = texture2D(colortex2, texcoord).rgb;   
 
+#if MODE == 2
+    lightmap = round(lightmap*10.0)/10.0;
+#endif
+
     vec3 skylight = lightmap.y * skyColor * 1.5 + vec3(0.4);
     vec3 torchlight = lightmap.x * vec3(0.95,0.6,0.45) * mix(6,1,skyColor.b+0.2);
 
+
+
+#if MODE == 1 || MODE == 2
     vec3 color = albedo * (skylight + torchlight);
+#elif MODE == 3
+    vec3 color = vec3(1.0,1.0,1.0);
+#endif
 
     //vec3 colorOutlines = 0.25 * (1.0-combinedOutline) * (vec3(1.0)-color);
 

@@ -1,0 +1,7 @@
+#shaders/lang/en_us.lang
+
+option.MODE=Render Mode
+option.MODE.comment=Filler
+value.MODE.1=Default
+value.MODE.2=Cel Shading
+value.MODE.3=Outlines Only
