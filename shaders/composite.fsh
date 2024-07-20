@@ -20,10 +20,15 @@ uniform ivec2 eyeBrightness;
 uniform sampler2D colortex0;
 uniform sampler2D colortex1;
 uniform sampler2D colortex2;
+uniform sampler2D gaux1;
 
 uniform sampler2D depthtex0;
 
 uniform sampler2D normals;
+
+uniform vec3 cameraPosition;
+
+uniform float frameTimeCounter;
 
 vec3 derivative(sampler2D tex, vec2 texCoord, vec2 resolution, float radius)
 {
@@ -137,18 +142,26 @@ float limit_range(float dither, float value, float limit_by)
     return round(value * limit_by + (dither-0.5)*0.25)/limit_by;
 }
 
+float line_hatching(float value, float offset)
+{
+    float lineCount = 10;
+    float valueOffset = 1.0 - value + 1.0;
+    
+    return 1.0-floor(mod(lineCount * (offset) * valueOffset, 1) + lineCount*valueOffset*0.0025);
+}
+
 void main()
 {
     vec3 albedo = texture2D(colortex0, texcoord).rgb;
     float depth = texture2D(depthtex0, texcoord).r;
     vec3 normal = texture2D(colortex1, texcoord).rgb;
 
+    vec3 localPos = texture2D(gaux1, texcoord).rgb;
+    vec3 worldPos = localPos + cameraPosition;
+
     float radiusFromDepth = 5 - (depth*depth) * 4;
 
-    float combinedOutline = 1.0-antiAliasOutlines(colortex0, depthtex0, colortex1, texcoord, vec2(viewWidth, viewHeight));
-
-    
-    
+    float combinedOutline = 1.0-antiAliasOutlines(colortex0, depthtex0, colortex1, texcoord, vec2(viewWidth, viewHeight));   
 
     vec3 lightmap = texture2D(colortex2, texcoord).rgb;   
 
@@ -161,16 +174,24 @@ void main()
 
 
 
-#if MODE == 1 || MODE == 2
     vec3 color = albedo * (skylight + torchlight);
-#elif MODE == 3
-    vec3 color = vec3(1.0,1.0,1.0);
+
+
+
+#if MODE == 3
+    float greyscale = rgb2hsv(color).z + sin((texcoord.x + texcoord.y) *200)*0.01;
+
+    color = vec3(mod(round(greyscale*16)*0.03125,0.33)+0.6);//clamp(vec3(1.25,1.25,1.25) * round(greyscale*16)*0.0625+0.35,0.0,1.0);
 #endif
 
     //vec3 colorOutlines = 0.25 * (1.0-combinedOutline) * (vec3(1.0)-color);
 
     if(depth == 1.0){
+#if MODE == 3
+        gl_FragData[0] = vec4(0.9, 0.9,  0.9, 1.0) * rgb2hsv(albedo).z;
+#else
         gl_FragData[0] = vec4(albedo, 1.0);
+#endif
         return;
     }
 
