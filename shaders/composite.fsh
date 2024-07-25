@@ -179,7 +179,7 @@ void main()
     vec3 color = albedo * (skylight + torchlight);
 
 #if OUTLINE_TYPE == 2
-    combinedOutline = (1.0 - combinedOutline)*0.5 + 1.0;
+    combinedOutline = (1.0 - combinedOutline)*0.5 + 0.5;
 #endif
 
 
