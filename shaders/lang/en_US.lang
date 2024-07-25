@@ -1,7 +1,10 @@
-#shaders/lang/en_us.lang
-
 option.MODE=Render Mode
-option.MODE.comment= Default : Simple lighting with outlines  Cel Shading : Cartoon style shading with outlines  Ink Outlines : Black outlines on a white surface with light greyscale shading
+option.MODE.comment=Default : Simple lighting with outlines. Cel Shading : Cartoon style shading with outlines. Ink Outlines : Black outlines on a white surface with light greyscale shading.
 value.MODE.1=Default
 value.MODE.2=Cel Shading
 value.MODE.3=Outlines Only
+
+option.OUTLINE_TYPE=Outline Mode
+option.OUTLINE_TYPE.comment=Dark : Outlines as if inked on paper. Bright : Subtle glowing outlines
+value.OUTLINE_TYPE.1=Dark
+value.OUTLINE_TYPE.2=Bright

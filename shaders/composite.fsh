@@ -4,6 +4,8 @@
 
 #define MODE 1 //[1 2 3]
 
+#define OUTLINE_TYPE 1 //[1 2]
+
 varying vec2 texcoord;
 
 uniform vec3 sunPosition;
@@ -176,12 +178,20 @@ void main()
 
     vec3 color = albedo * (skylight + torchlight);
 
+#if OUTLINE_TYPE == 2
+    combinedOutline = (1.0 - combinedOutline)*0.5 + 1.0;
+#endif
 
 
 #if MODE == 3
     float greyscale = rgb2hsv(color).z + sin((texcoord.x + texcoord.y) *200)*0.01;
-
+#if OUTLINE_TYPE == 2
+    color = color - 0.2;
+#endif
     color = vec3(mod(round(greyscale*16)*0.03125,0.33)+0.6);//clamp(vec3(1.25,1.25,1.25) * round(greyscale*16)*0.0625+0.35,0.0,1.0);
+#if OUTLINE_TYPE == 2
+    color = color - 0.2;
+#endif
 #endif
 
     //vec3 colorOutlines = 0.25 * (1.0-combinedOutline) * (vec3(1.0)-color);
