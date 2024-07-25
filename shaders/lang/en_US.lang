@@ -5,6 +5,6 @@ value.MODE.2=Cel Shading
 value.MODE.3=Outlines Only
 
 option.OUTLINE_TYPE=Outline Mode
-option.OUTLINE_TYPE.comment=Dark : Outlines as if inked on paper. Bright : Subtle glowing outlines
+option.OUTLINE_TYPE.comment=Dark : Outlines that appear as if penned with black ink. Bright : Subtle glowing outlines.
 value.OUTLINE_TYPE.1=Dark
 value.OUTLINE_TYPE.2=Bright
